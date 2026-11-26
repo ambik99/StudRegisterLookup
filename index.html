@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Register Lookup</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface-alt: #f1f5f9;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --text-soft: #64748b;
+      --blue: #2563eb;
+      --blue-bg: #eff6ff;
+      --blue-border: #bfdbfe;
+      --green: #059669;
+      --green-bg: #ecfdf5;
+      --green-border: #a7f3d0;
+      --amber: #d97706;
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --rose: #e11d48;
+      --rose-bg: #fff1f2;
+      --rose-border: #fecdd3;
+      --violet: #7c3aed;
+      --violet-bg: #f5f3ff;
+      --violet-border: #ddd6fe;
+      --indigo: #4f46e5;
+      --indigo-bg: #eef2ff;
+      --indigo-border: #c7d2fe;
+      --radius: 10px;
+      --shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .brand p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    /* Feature Navigation Tabs */
+    .feature-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .tab-btn:hover {
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+
+    .tab-btn .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .tab-btn[data-tab="search"] .dot { background: var(--blue); }
+    .tab-btn[data-tab="register"] .dot { background: var(--green); }
+    .tab-btn[data-tab="source"] .dot { background: var(--amber); }
+
+    .tab-btn[data-tab="search"].active {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #ffffff;
+    }
+    .tab-btn[data-tab="register"].active {
+      background: var(--green);
+      border-color: var(--green);
+      color: #ffffff;
+    }
+    .tab-btn[data-tab="source"].active {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #ffffff;
+    }
+    .tab-btn.active .dot {
+      background: #ffffff;
+    }
+
+    /* Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* Filter Pills */
+    .filter-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .filter-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+      margin-right: 4px;
+    }
+
+    .pill {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .pill:hover {
+      border-color: var(--border-strong);
+      color: var(--text);
+    }
+
+    /* Color-coded field pills */
+    .pill[data-field="all"].active {
+      background: var(--indigo-bg);
+      border-color: var(--indigo-border);
+      color: var(--indigo);
+    }
+    .pill[data-field="name"].active {
+      background: var(--blue-bg);
+      border-color: var(--blue-border);
+      color: var(--blue);
+    }
+    .pill[data-field="dob"].active {
+      background: var(--rose-bg);
+      border-color: var(--rose-border);
+      color: var(--rose);
+    }
+    .pill[data-field="adm"].active {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+      color: var(--green);
+    }
+    .pill[data-field="reg"].active {
+      background: var(--violet-bg);
+      border-color: var(--violet-border);
+      color: var(--violet);
+    }
+
+    /* Sheet pills */
+    .sheet-pill.active {
+      background: var(--text);
+      border-color: var(--text);
+      color: #ffffff;
+    }
+
+    /* Search Row */
+    .search-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: stretch;
+      margin-top: 8px;
+    }
+
+    .input-wrap {
+      position: relative;
+      flex: 1 1 300px;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 48px;
+      padding: 0 84px 0 14px;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--surface);
+      border: 1.5px solid var(--border-strong);
+      border-radius: var(--radius);
+      outline: none;
+      transition: border-color 0.15s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--blue);
+    }
+
+    .input-actions {
+      position: absolute;
+      right: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .icon-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 7px;
+      font-size: 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-btn:hover {
+      background: #e2e8f0;
+      color: var(--text);
+    }
+
+    .hidden-date {
+      position: fixed;
+      left: -9999px;
+      top: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 0 16px;
+      height: 40px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: var(--surface-alt);
+      border-color: var(--border-strong);
+    }
+
+    .btn-primary {
+      height: 48px;
+      padding: 0 24px;
+      background: var(--blue);
+      border-color: var(--blue);
+      color: #ffffff;
+      font-size: 15px;
+      flex: 0 0 auto;
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
+
+    .btn-green {
+      background: var(--green);
+      border-color: var(--green);
+      color: #ffffff;
+    }
+    .btn-green:hover {
+      background: #047857;
+      border-color: #047857;
+    }
+
+    .btn-amber {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #ffffff;
+    }
+    .btn-amber:hover {
+      background: #b45309;
+      border-color: #b45309;
+    }
+
+    .btn-sm {
+      height: 32px;
+      padding: 0 10px;
+      font-size: 12px;
+      border-radius: 7px;
+    }
+
+    .quick-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .quick-chip {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .quick-chip:hover {
+      border-color: var(--blue-border);
+      background: var(--blue-bg);
+      color: var(--blue);
+    }
+
+    /* Results Toolbar */
+    .results-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .results-meta {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .results-meta span {
+      color: var(--text-soft);
+      font-weight: 400;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    /* Zero-Scroll Responsive Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+
+    .data-table th {
+      text-align: left;
+      padding: 10px 8px;
+      background: var(--surface-alt);
+      color: var(--text-muted);
+      font-size: 11.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .data-table td {
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    .data-table tbody tr:hover {
+      background: #f8fafc;
+    }
+
+    .sheet-tag {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--indigo-bg);
+      color: var(--indigo);
+      border: 1px solid var(--indigo-border);
+    }
+
+    .sheet-tag.s1 { background: var(--blue-bg); color: var(--blue); border-color: var(--blue-border); }
+    .sheet-tag.s2 { background: var(--green-bg); color: var(--green); border-color: var(--green-border); }
+    .sheet-tag.s3 { background: var(--violet-bg); color: var(--violet); border-color: var(--violet-border); }
+
+    mark {
+      background: #fef08a;
+      color: #0f172a;
+      padding: 0 2px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 36px 16px;
+      color: var(--text-muted);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius);
+      background: var(--bg);
+    }
+
+    .empty-state p {
+      margin-bottom: 12px;
+      font-size: 14px;
+    }
+
+    /* Upload & Pre-bundle Grid */
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .drop-zone {
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius);
+      padding: 24px 16px;
+      text-align: center;
+      background: var(--bg);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--amber);
+      background: var(--amber-bg);
+    }
+
+    .drop-zone h3 {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .drop-zone p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .info-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .info-box h3 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .info-box p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .stat-pill {
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: var(--text);
+      color: #ffffff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.18);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: all 0.2s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile & Tablet Stack (Zero Horizontal Scroll) */
+    @media (max-width: 900px) {
+      .search-bar {
+        flex-direction: column;
+      }
+      .btn-primary {
+        width: 100%;
+      }
+      .data-table, .data-table thead, .data-table tbody, .data-table th, .data-table td, .data-table tr {
+        display: block;
+        width: 100%;
+      }
+      .data-table thead {
+        display: none;
+      }
+      .data-table tbody tr {
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        background: var(--surface);
+      }
+      .data-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 7px 0;
+        border-bottom: 1px solid var(--surface-alt);
+        text-align: right;
+      }
+      .data-table td:last-child {
+        border-bottom: none;
+      }
+      .data-table td::before {
+        content: attr(data-label);
+        font-size: 11.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--text-soft);
+        text-align: left;
+        flex: 0 0 38%;
+      }
+    }
+
+    @media print {
+      .feature-tabs, .search-controls, .toolbar-actions, .quick-row, .toast, .col-copy {
+        display: none !important;
+      }
+      body { background: #ffffff; }
+      .card { border: none; box-shadow: none; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">SR</div>
+        <div>
+          <h1>Student Register Lookup</h1>
+          <p id="workbookSubtitle">Regn. &amp; Adm.No..xlsx &bull; Pre-loaded &amp; IndexedDB Ready</p>
+        </div>
+      </div>
+      <div class="status-badge">
+        <span class="status-dot"></span>
+        <span id="recordCountBadge">15 Records Loaded</span>
+      </div>
+    </header>
+
+    <nav class="feature-tabs" aria-label="Primary Views">
+      <button type="button" class="tab-btn active" data-tab="search">
+        <span class="dot"></span>Search Register
+      </button>
+      <button type="button" class="tab-btn" data-tab="register">
+        <span class="dot"></span>Full Register
+      </button>
+      <button type="button" class="tab-btn" data-tab="source">
+        <span class="dot"></span>Excel &amp; Pre-Bundle
+      </button>
+    </nav>
+
+    <!-- TAB 1: SEARCH REGISTER -->
+    <section id="panel-search" class="panel active">
+      <div class="card search-controls">
+        <div class="filter-group" id="fieldPills">
+          <span class="filter-label">Search By:</span>
+          <button type="button" class="pill active" data-field="all">All Fields</button>
+          <button type="button" class="pill" data-field="name">Name of Student</button>
+          <button type="button" class="pill" data-field="dob">Date of Birth</button>
+          <button type="button" class="pill" data-field="adm">Adm.NO</button>
+          <button type="button" class="pill" data-field="reg">Registration</button>
+        </div>
+
+        <div class="filter-group" id="sheetPills">
+          <span class="filter-label">Worksheet:</span>
+          <button type="button" class="pill sheet-pill active" data-sheet="ALL">All Sheets</button>
+        </div>
+
+        <div class="search-bar">
+          <div class="input-wrap">
+            <input
+              type="text"
+              id="searchInput"
+              class="search-input"
+              placeholder="Enter student name, DOB (DD-MM-YYYY), Adm.NO, or Registration..."
+              autocomplete="off"
+            />
+            <div class="input-actions">
+              <button type="button" id="dobPickerBtn" class="icon-btn" title="Pick Date of Birth">&#128197;</button>
+              <button type="button" id="clearBtn" class="icon-btn" title="Clear Search">&times;</button>
+            </div>
+            <input type="date" id="hiddenDateInput" class="hidden-date" tabindex="-1" aria-hidden="true" />
+          </div>
+          <button type="button" id="searchBtn" class="btn btn-primary">Search</button>
+        </div>
+
+        <div class="quick-row" id="quickChips"></div>
+      </div>
+
+      <div class="card">
+        <div class="results-header">
+          <div class="results-meta" id="resultsMeta">Showing all 15 pre-loaded records</div>
+          <div class="toolbar-actions">
+            <button type="button" id="showAllBtn" class="btn btn-sm">Show All</button>
+            <button type="button" id="copyTableBtn" class="btn btn-sm">Copy Table</button>
+            <button type="button" id="exportMatchesBtn" class="btn btn-sm">Export (.csv)</button>
+            <button type="button" id="printBtn" class="btn btn-sm">Print</button>
+          </div>
+        </div>
+        <div id="searchResultsContainer"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: FULL REGISTER -->
+    <section id="panel-register" class="panel">
+      <div class="card">
+        <div class="results-header">
+          <div class="results-meta" id="fullRegisterMeta">Full Register View</div>
+          <div class="toolbar-actions">
+            <button type="button" id="prevPageBtn" class="btn btn-sm">&larr; Prev</button>
+            <span id="pageIndicator" style="font-size:12.5px;font-weight:600;align-self:center;padding:0 6px;">Page 1</span>
+            <button type="button" id="nextPageBtn" class="btn btn-sm">Next &rarr;</button>
+            <button type="button" id="exportFullBtn" class="btn btn-sm btn-green">Export Full CSV</button>
+          </div>
+        </div>
+        <div id="fullRegisterContainer"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: EXCEL & PRE-BUNDLE -->
+    <section id="panel-source" class="panel">
+      <div class="card">
+        <div class="source-grid">
+          <div class="drop-zone" id="dropZone">
+            <h3>Load Your Excel / CSV Register</h3>
+            <p>Drag &amp; drop <strong>Regn. &amp; Adm.No..xlsx</strong> (.xlsx, .xls, or .csv) here or click to browse. Automatically splits side-by-side register tables and saves locally in IndexedDB.</p>
+            <button type="button" id="browseFileBtn" class="btn btn-amber">Choose Excel / CSV File</button>
+            <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" style="display:none;" />
+          </div>
+
+          <div class="info-box">
+            <div>
+              <h3>Pre-Bundle Into Standalone HTML</h3>
+              <p>Once your full Excel register is loaded, download a single self-contained HTML file with all records embedded inside—ready to upload to GitHub Pages or share offline without re-uploading Excel.</p>
+              <div class="stat-row" id="workbookStats"></div>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;">
+              <button type="button" id="downloadBundleBtn" class="btn btn-green">Download Pre-Bundled HTML</button>
+              <button type="button" id="resetDefaultBtn" class="btn">Reset Sample Data</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script id="preloaded-data" type="application/json">
+  {
+    "fileName": "Regn. & Adm.No..xlsx",
+    "columns": ["Registration", "Name of Student", "Adm.NO", "Date of ADM", "Class", "Date of Birth", "Remarks"],
+    "records": [
+      { "Sheet": "4056 - 6282", "Registration": "REG-4056", "Name of Student": "Aarav Sharma", "Adm.NO": "4056", "Date of ADM": "12-04-2018", "Class": "X-A", "Date of Birth": "15-08-2010", "Remarks": "Regular" },
+      { "Sheet": "4056 - 6282", "Registration": "REG-4189", "Name of Student": "Ananya Roy", "Adm.NO": "4189", "Date of ADM": "18-04-2018", "Class": "X-B", "Date of Birth": "22-11-2010", "Remarks": "Regular" },
+      { "Sheet": "4056 - 6282", "Registration": "REG-4512", "Name of Student": "Rohan Das", "Adm.NO": "4512", "Date of ADM": "05-05-2019", "Class": "IX-A", "Date of Birth": "03-02-2011", "Remarks": "Sports Quota" },
+      { "Sheet": "4056 - 6282", "Registration": "REG-5104", "Name of Student": "Priya Chettri", "Adm.NO": "5104", "Date of ADM": "10-04-2020", "Class": "VIII-A", "Date of Birth": "19-07-2012", "Remarks": "Regular" },
+      { "Sheet": "4056 - 6282", "Registration": "REG-5890", "Name of Student": "Subham Ghosh", "Adm.NO": "5890", "Date of ADM": "21-06-2021", "Class": "VII-B", "Date of Birth": "30-09-2013", "Remarks": "Regular" },
+      { "Sheet": "6283 - ", "Registration": "REG-6283", "Name of Student": "Sneha Pradhan", "Adm.NO": "6283", "Date of ADM": "04-04-2022", "Class": "VI-A", "Date of Birth": "11-01-2014", "Remarks": "New Admission" },
+      { "Sheet": "6283 - ", "Registration": "REG-6345", "Name of Student": "Debanjan Saha", "Adm.NO": "6345", "Date of ADM": "14-04-2022", "Class": "VI-B", "Date of Birth": "25-05-2014", "Remarks": "Regular" },
+      { "Sheet": "6283 - ", "Registration": "REG-6490", "Name of Student": "Tania Gurung", "Adm.NO": "6490", "Date of ADM": "02-05-2023", "Class": "V-A", "Date of Birth": "09-12-2015", "Remarks": "Regular" },
+      { "Sheet": "6283 - ", "Registration": "REG-6612", "Name of Student": "Karan Thapa", "Adm.NO": "6612", "Date of ADM": "19-04-2024", "Class": "IV-A", "Date of Birth": "14-03-2016", "Remarks": "Bus Route 2" },
+      { "Sheet": "6283 - ", "Registration": "REG-6788", "Name of Student": "Megha Bose", "Adm.NO": "6788", "Date of ADM": "08-04-2025", "Class": "III-B", "Date of Birth": "27-10-2017", "Remarks": "Regular" },
+      { "Sheet": "1973 tO", "Registration": "REG-1973", "Name of Student": "Sayan Banerjee", "Adm.NO": "1973", "Date of ADM": "10-04-2012", "Class": "XII-Sci", "Date of Birth": "06-06-2008", "Remarks": "CBSE Board" },
+      { "Sheet": "1973 tO", "Registration": "REG-2140", "Name of Student": "Ritika Mondal", "Adm.NO": "2140", "Date of ADM": "16-04-2013", "Class": "XII-Com", "Date of Birth": "18-09-2008", "Remarks": "CBSE Board" },
+      { "Sheet": "1973 tO", "Registration": "REG-2895", "Name of Student": "Abhishek Lama", "Adm.NO": "2895", "Date of ADM": "09-05-2015", "Class": "XI-Sci", "Date of Birth": "21-04-2009", "Remarks": "Regular" },
+      { "Sheet": "1973 tO", "Registration": "REG-3310", "Name of Student": "Nandini Paul", "Adm.NO": "3310", "Date of ADM": "11-04-2016", "Class": "XI-Hum", "Date of Birth": "02-12-2009", "Remarks": "Regular" },
+      { "Sheet": "1973 tO", "Registration": "REG-3902", "Name of Student": "Soumya Dutta", "Adm.NO": "3902", "Date of ADM": "20-04-2017", "Class": "X-A", "Date of Birth": "14-08-2010", "Remarks": "House Captain" }
+    ]
+  }
+  </script>
+
+  <script>
+    (function () {
+      const DB_NAME = "StudentRegisterLookupDB_v3";
+      const STORE_NAME = "workbooks";
+      const PAGE_SIZE = 50;
+
+      const state = {
+        fileName: "Regn. & Adm.No..xlsx",
+        columns: [],
+        records: [],
+        filtered: [],
+        activeField: "all",
+        activeSheet: "ALL",
+        lastQuery: "",
+        registerPage: 1
+      };
+
+      const MONTHS = {
+        jan: "01", january: "01", feb: "02", february: "02", mar: "03", march: "03",
+        apr: "04", april: "04", may: "05", jun: "06", june: "06", jul: "07", july: "07",
+        aug: "08", august: "08", sep: "09", sept: "09", september: "09", oct: "10", october: "10",
+        nov: "11", november: "11", dec: "12", december: "12"
+      };
+
+      function showToast(msg) {
+        const el = document.getElementById("toast");
+        el.textContent = msg;
+        el.classList.add("show");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => el.classList.remove("show"), 2400);
+      }
+
+      function escapeHtml(val) {
+        return String(val == null ? "" : val)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function normalizeDateStr(raw) {
+        if (raw == null || raw === "") return "";
+        const str = String(raw).trim();
+        if (/^\d{5}$/.test(str)) {
+          const serial = parseInt(str, 10);
+          if (serial > 15000 && serial < 65000) {
+            const utc = new Date(Math.round((serial - 25569) * 86400 * 1000));
+            const dd = String(utc.getUTCDate()).padStart(2, "0");
+            const mm = String(utc.getUTCMonth() + 1).padStart(2, "0");
+            const yyyy = utc.getUTCFullYear();
+            return `${dd}-${mm}-${yyyy}`;
+          }
+        }
+        let m = str.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})$/);
+        if (m) return `${m[3].padStart(2, "0")}-${m[2].padStart(2, "0")}-${m[1]}`;
+
+        m = str.match(/^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2,4})$/);
+        if (m) {
+          const yr = m[3].length === 2 ? (parseInt(m[3], 10) > 40 ? "19" + m[3] : "20" + m[3]) : m[3];
+          return `${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}-${yr}`;
+        }
+
+        m = str.match(/^(\d{1,2})[\s,-]+([A-Za-z]+)[\s,-]+(\d{2,4})$/);
+        if (m && MONTHS[m[2].toLowerCase()]) {
+          const yr = m[3].length === 2 ? (parseInt(m[3], 10) > 40 ? "19" + m[3] : "20" + m[3]) : m[3];
+          return `${m[1].padStart(2, "0")}-${MONTHS[m[2].toLowerCase()]}-${yr}`;
+        }
+        return str;
+      }
+
+      function dateVariants(raw) {
+        const norm = normalizeDateStr(raw).toLowerCase();
+        const rawLow = String(raw || "").trim().toLowerCase();
+        const set = new Set([rawLow, norm]);
+        if (norm) {
+          set.add(norm.replace(/-/g, "/"));
+          set.add(norm.replace(/-/g, ""));
+          const parts = norm.split("-");
+          if (parts.length === 3) {
+            set.add(`${parts[2]}-${parts[1]}-${parts[0]}`);
+            set.add(`${parseInt(parts[0], 10)}-${parseInt(parts[1], 10)}-${parts[2]}`);
+            set.add(`${parseInt(parts[0], 10)}/${parseInt(parts[1], 10)}/${parts[2]}`);
+          }
+        }
+        return Array.from(set).filter(Boolean);
+      }
+
+      function normalizeId(val) {
+        return String(val || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+      }
+
+      function findColumnKey(columns, type) {
+        const patterns = {
+          name: [/name\s*of\s*student/i, /student\s*name/i, /^name$/i],
+          dob: [/date\s*of\s*birth/i, /dob/i, /birth/i],
+          adm: [/adm\.?\s*no/i, /admission/i],
+          reg: [/registration/i, /regn/i, /reg\.?\s*no/i]
+        }[type] || [];
+        for (const pat of patterns) {
+          const found = columns.find(c => pat.test(c));
+          if (found) return found;
+        }
+        return null;
+      }
+
+      function buildSearchIndex(records, columns) {
+        const nameCol = findColumnKey(columns, "name");
+        const dobCol = findColumnKey(columns, "dob");
+        const admCol = findColumnKey(columns, "adm");
+        const regCol = findColumnKey(columns, "reg");
+
+        records.forEach((rec, idx) => {
+          rec._idx = idx + 1;
+          const allVals = columns.map(c => String(rec[c] || "")).join(" ");
+          const dobRaw = dobCol ? rec[dobCol] : "";
+          const admRaw = admCol ? rec[admCol] : "";
+          const regRaw = regCol ? rec[regCol] : "";
+          const nameRaw = nameCol ? rec[nameCol] : "";
+
+          rec._search = {
+            name: String(nameRaw).toLowerCase(),
+            dobVariants: dateVariants(dobRaw),
+            admNorm: normalizeId(admRaw),
+            admRaw: String(admRaw).toLowerCase(),
+            regNorm: normalizeId(regRaw),
+            regRaw: String(regRaw).toLowerCase(),
+            all: (allVals + " " + dateVariants(dobRaw).join(" ")).toLowerCase()
+          };
+        });
+      }
+
+      function getSheetClass(sheetName) {
+        const sheets = Array.from(new Set(state.records.map(r => r.Sheet || "Sheet1")));
+        const i = sheets.indexOf(sheetName);
+        return i === 0 ? "s1" : i === 1 ? "s2" : i === 2 ? "s3" : "";
+      }
+
+      function renderSheetPills() {
+        const container = document.getElementById("sheetPills");
+        const sheets = Array.from(new Set(state.records.map(r => r.Sheet).filter(Boolean)));
+        let html = `<span class="filter-label">Worksheet:</span>`;
+        html += `<button type="button" class="pill sheet-pill ${state.activeSheet === "ALL" ? "active" : ""}" data-sheet="ALL">All Sheets (${state.records.length})</button>`;
+        sheets.forEach(s => {
+          const count = state.records.filter(r => r.Sheet === s).length;
+          html += `<button type="button" class="pill sheet-pill ${state.activeSheet === s ? "active" : ""}" data-sheet="${escapeHtml(s)}">${escapeHtml(s)} (${count})</button>`;
+        });
+        container.innerHTML = html;
+      }
+
+      function renderQuickChips() {
+        const container = document.getElementById("quickChips");
+        if (!state.records.length) {
+          container.innerHTML = "";
+          return;
+        }
+        const nameCol = findColumnKey(state.columns, "name");
+        const dobCol = findColumnKey(state.columns, "dob");
+        const admCol = findColumnKey(state.columns, "adm");
+        const regCol = findColumnKey(state.columns, "reg");
+        const r0 = state.records[0];
+        const r1 = state.records[Math.min(5, state.records.length - 1)];
+
+        const samples = [];
+        if (nameCol && r0[nameCol]) samples.push({ label: r0[nameCol], val: r0[nameCol], field: "name" });
+        if (dobCol && r0[dobCol]) samples.push({ label: "DOB: " + r0[dobCol], val: r0[dobCol], field: "dob" });
+        if (admCol && r1[admCol]) samples.push({ label: "Adm: " + r1[admCol], val: r1[admCol], field: "adm" });
+        if (regCol && r1[regCol]) samples.push({ label: "Reg: " + r1[regCol], val: r1[regCol], field: "reg" });
+
+        container.innerHTML = `<span class="filter-label">Quick Try:</span>` +
+          samples.map(s => `<button type="button" class="quick-chip" data-q="${escapeHtml(s.val)}" data-f="${s.field}">${escapeHtml(s.label)}</button>`).join("");
+      }
+
+      function highlightText(text, query) {
+        const safe = escapeHtml(text);
+        if (!query) return safe;
+        const q = query.trim();
+        if (!q) return safe;
+        const escapedQ = q.replace(/[.*+?^${}()|[\]\]/g, "\$&");
+        try {
+          return safe.replace(new RegExp(`(${escapedQ})`, "gi"), "<mark>$1</mark>");
+        } catch (_) {
+          return safe;
+        }
+      }
+
+      function renderTable(records, containerId, query, allowCopy) {
+        const container = document.getElementById(containerId);
+        if (!records.length) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <p>No matching student records found for <strong>"${escapeHtml(query)}"</strong>.</p>
+              <button type="button" class="btn btn-sm" onclick="window.resetSearchFilter()">Show All Records</button>
+            </div>`;
+          return;
+        }
+
+        const cols = state.columns;
+        let html = `<table class="data-table"><thead><tr>`;
+        html += `<th style="width:44px;">#</th>`;
+        html += `<th style="width:105px;">Sheet</th>`;
+        cols.forEach(c => {
+          html += `<th>${escapeHtml(c)}</th>`;
+        });
+        if (allowCopy) html += `<th style="width:74px;" class="col-copy">Action</th>`;
+        html += `</tr></thead><tbody>`;
+
+        records.forEach((rec, i) => {
+          const sClass = getSheetClass(rec.Sheet);
+          html += `<tr>`;
+          html += `<td data-label="#">${rec._idx || i + 1}</td>`;
+          html += `<td data-label="Sheet"><span class="sheet-tag ${sClass}">${escapeHtml(rec.Sheet || "Sheet1")}</span></td>`;
+          cols.forEach(c => {
+            const val = rec[c] != null && rec[c] !== "" ? String(rec[c]) : "—";
+            html += `<td data-label="${escapeHtml(c)}">${highlightText(val, query)}</td>`;
+          });
+          if (allowCopy) {
+            html += `<td data-label="Action" class="col-copy"><button type="button" class="btn btn-sm copy-row-btn" data-idx="${rec._idx - 1}">Copy</button></td>`;
+          }
+          html += `</tr>`;
+        });
+
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+      }
+
+      function executeSearch() {
+        const input = document.getElementById("searchInput");
+        const rawQuery = input.value.trim();
+        state.lastQuery = rawQuery;
+
+        let pool = state.records;
+        if (state.activeSheet !== "ALL") {
+          pool = pool.filter(r => r.Sheet === state.activeSheet);
+        }
+
+        if (!rawQuery) {
+          state.filtered = pool;
+          document.getElementById("resultsMeta").innerHTML =
+            `Showing all ${pool.length} records <span>(${state.activeSheet === "ALL" ? "All Worksheets" : escapeHtml(state.activeSheet)})</span>`;
+          renderTable(pool, "searchResultsContainer", "", true);
+          return;
+        }
+
+        const qLow = rawQuery.toLowerCase();
+        const qNormId = normalizeId(rawQuery);
+        const qDates = dateVariants(rawQuery);
+
+        const matches = pool.filter(rec => {
+          const s = rec._search;
+          if (state.activeField === "name") {
+            return s.name.includes(qLow) || (!s.name && s.all.includes(qLow));
+          }
+          if (state.activeField === "dob") {
+            return s.dobVariants.some(dv => qDates.some(qd => dv.includes(qd) || qd.includes(dv))) || s.all.includes(qLow);
+          }
+          if (state.activeField === "adm") {
+            return (qNormId && s.admNorm.includes(qNormId)) || s.admRaw.includes(qLow) || s.all.includes(qLow);
+          }
+          if (state.activeField === "reg") {
+            return (qNormId && s.regNorm.includes(qNormId)) || s.regRaw.includes(qLow) || s.all.includes(qLow);
+          }
+          // all fields
+          if (s.all.includes(qLow)) return true;
+          if (qNormId && (s.admNorm.includes(qNormId) || s.regNorm.includes(qNormId))) return true;
+          if (s.dobVariants.some(dv => qDates.some(qd => dv === qd || dv.includes(qd)))) return true;
+          return false;
+        });
+
+        state.filtered = matches;
+        document.getElementById("resultsMeta").innerHTML =
+          `${matches.length} matching record${matches.length === 1 ? "" : "s"} found <span>for "${escapeHtml(rawQuery)}"</span>`;
+        renderTable(matches, "searchResultsContainer", rawQuery, true);
+      }
+
+      window.resetSearchFilter = function () {
+        document.getElementById("searchInput").value = "";
+        state.activeField = "all";
+        state.activeSheet = "ALL";
+        document.querySelectorAll("#fieldPills .pill").forEach(p => p.classList.toggle("active", p.dataset.field === "all"));
+        renderSheetPills();
+        executeSearch();
+      };
+
+      function renderFullRegister() {
+        const total = state.records.length;
+        const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+        if (state.registerPage > totalPages) state.registerPage = totalPages;
+        const start = (state.registerPage - 1) * PAGE_SIZE;
+        const slice = state.records.slice(start, start + PAGE_SIZE);
+
+        document.getElementById("fullRegisterMeta").innerHTML =
+          `Total ${total} records <span>(Showing ${total ? start + 1 : 0}–${Math.min(start + PAGE_SIZE, total)})</span>`;
+        document.getElementById("pageIndicator").textContent = `Page ${state.registerPage} of ${totalPages}`;
+        document.getElementById("prevPageBtn").disabled = state.registerPage <= 1;
+        document.getElementById("nextPageBtn").disabled = state.registerPage >= totalPages;
+
+        renderTable(slice, "fullRegisterContainer", "", false);
+      }
+
+      function updateHeaderAndStats() {
+        document.getElementById("workbookSubtitle").textContent = `${state.fileName} • ${state.columns.length} Columns`;
+        document.getElementById("recordCountBadge").textContent = `${state.records.length} Records Loaded`;
+
+        const sheets = Array.from(new Set(state.records.map(r => r.Sheet || "Sheet1")));
+        const statsEl = document.getElementById("workbookStats");
+        statsEl.innerHTML =
+          `<span class="stat-pill">File: ${escapeHtml(state.fileName)}</span>` +
+          `<span class="stat-pill">Rows: ${state.records.length}</span>` +
+          sheets.map(s => `<span class="stat-pill">${escapeHtml(s)}: ${state.records.filter(r => r.Sheet === s).length}</span>`).join("");
+      }
+
+      function applyDataset(data, persist) {
+        state.fileName = data.fileName || "Register.xlsx";
+        state.columns = Array.isArray(data.columns) && data.columns.length
+          ? data.columns
+          : Object.keys((data.records && data.records[0]) || {}).filter(k => k !== "Sheet" && !k.startsWith("_"));
+        state.records = (data.records || []).map(r => {
+          const clean = { Sheet: r.Sheet || "Sheet1" };
+          state.columns.forEach(c => {
+            clean[c] = c.toLowerCase().includes("birth") || c.toLowerCase().includes("adm") && c.toLowerCase().includes("date")
+              ? normalizeDateStr(r[c])
+              : (r[c] != null ? String(r[c]).trim() : "");
+          });
+          return clean;
+        });
+
+        buildSearchIndex(state.records, state.columns);
+        state.activeSheet = "ALL";
+        state.registerPage = 1;
+        updateHeaderAndStats();
+        renderSheetPills();
+        renderQuickChips();
+        executeSearch();
+        renderFullRegister();
+
+        if (persist) saveToIndexedDB({ fileName: state.fileName, columns: state.columns, records: state.records });
+      }
+
+      function saveToIndexedDB(payload) {
+        try {
+          if (!window.indexedDB) return;
+          const req = indexedDB.open(DB_NAME, 1);
+          req.onupgradeneeded = e => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+          };
+          req.onsuccess = e => {
+            try {
+              const db = e.target.result;
+              const tx = db.transaction(STORE_NAME, "readwrite");
+              tx.objectStore(STORE_NAME).put(payload, "activeWorkbook");
+            } catch (_) {}
+          };
+        } catch (_) {}
+      }
+
+      function loadFromIndexedDB(fallbackCallback) {
+        try {
+          if (!window.indexedDB) return fallbackCallback();
+          const req = indexedDB.open(DB_NAME, 1);
+          req.onupgradeneeded = e => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+          };
+          req.onsuccess = e => {
+            try {
+              const db = e.target.result;
+              const tx = db.transaction(STORE_NAME, "readonly");
+              const getReq = tx.objectStore(STORE_NAME).get("activeWorkbook");
+              getReq.onsuccess = () => {
+                if (getReq.result && Array.isArray(getReq.result.records) && getReq.result.records.length) {
+                  applyDataset(getReq.result, false);
+                } else {
+                  fallbackCallback();
+                }
+              };
+              getReq.onerror = fallbackCallback;
+            } catch (_) {
+              fallbackCallback();
+            }
+          };
+          req.onerror = fallbackCallback;
+        } catch (_) {
+          fallbackCallback();
+        }
+      }
+
+      function clearIndexedDB() {
+        try {
+          if (!window.indexedDB) return;
+          const req = indexedDB.open(DB_NAME, 1);
+          req.onsuccess = e => {
+            try {
+              const db = e.target.result;
+              const tx = db.transaction(STORE_NAME, "readwrite");
+              tx.objectStore(STORE_NAME).delete("activeWorkbook");
+            } catch (_) {}
+          };
+        } catch (_) {}
+      }
+
+      function recordsToCsv(records) {
+        const headers = ["Sheet", ...state.columns];
+        const escapeCsv = v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`;
+        const lines = [headers.map(escapeCsv).join(",")];
+        records.forEach(r => {
+          lines.push(headers.map(h => escapeCsv(r[h])).join(","));
+        });
+        return lines.join("
+");
+      }
+
+      function downloadFile(content, filename, mime) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function parseCsvText(text, fileName) {
+        const rows = [];
+        let row = [], cell = "", inQuotes = false;
+        for (let i = 0; i < text.length; i++) {
+          const ch = text[i], next = text[i + 1];
+          if (inQuotes) {
+            if (ch === '"' && next === '"') { cell += '"'; i++; }
+            else if (ch === '"') inQuotes = false;
+            else cell += ch;
+          } else {
+            if (ch === '"') inQuotes = true;
+            else if (ch === ",") { row.push(cell.trim()); cell = ""; }
+            else if (ch === "
+" || (ch === "" && next === "
+")) {
+              if (ch === "") i++;
+              row.push(cell.trim());
+              if (row.some(Boolean)) rows.push(row);
+              row = []; cell = "";
+            } else cell += ch;
+          }
+        }
+        if (cell || row.length) {
+          row.push(cell.trim());
+          if (row.some(Boolean)) rows.push(row);
+        }
+        if (rows.length < 2) return showToast("CSV file appears empty.");
+        const headers = rows[0].map((h, i) => h || `Column ${i + 1}`);
+        const records = rows.slice(1).map(r => {
+          const obj = { Sheet: "Sheet1" };
+          headers.forEach((h, i) => { obj[h] = r[i] || ""; });
+          return obj;
+        });
+        applyDataset({ fileName, columns: headers, records }, true);
+        showToast(`Loaded ${records.length} records from ${fileName}`);
+      }
+
+      function extractSheetRows(matrix, sheetName) {
+        let headerRowIdx = -1;
+        for (let r = 0; r < Math.min(matrix.length, 15); r++) {
+          const row = matrix[r] || [];
+          const joined = row.join(" ").toLowerCase();
+          if (joined.includes("name") || joined.includes("adm") || joined.includes("reg")) {
+            headerRowIdx = r;
+            break;
+          }
+        }
+        if (headerRowIdx === -1) headerRowIdx = 0;
+        const headerRow = (matrix[headerRowIdx] || []).map(h => String(h || "").trim());
+
+        // Detect side-by-side duplicate header tables within the same worksheet
+        const headerPositions = [];
+        headerRow.forEach((cell, idx) => {
+          if (/^(reg|registration|regn)/i.test(cell)) headerPositions.push(idx);
+        });
+
+        const segments = [];
+        if (headerPositions.length > 1) {
+          for (let s = 0; s < headerPositions.length; s++) {
+            const start = headerPositions[s];
+            const end = s + 1 < headerPositions.length ? headerPositions[s + 1] : headerRow.length;
+            segments.push({ start, end });
+          }
+        } else {
+          segments.push({ start: 0, end: headerRow.length });
+        }
+
+        const outRecords = [];
+        const colSet = new Set();
+
+        segments.forEach(seg => {
+          const segCols = [];
+          for (let c = seg.start; c < seg.end; c++) {
+            const h = headerRow[c];
+            if (h) {
+              segCols.push({ idx: c, name: h });
+              colSet.add(h);
+            }
+          }
+          if (!segCols.length) return;
+
+          for (let r = headerRowIdx + 1; r < matrix.length; r++) {
+            const row = matrix[r] || [];
+            const rec = { Sheet: sheetName };
+            let hasData = false;
+            segCols.forEach(sc => {
+              const val = row[sc.idx] != null ? String(row[sc.idx]).trim() : "";
+              if (val) hasData = true;
+              rec[sc.name] = val;
+            });
+            if (hasData) outRecords.push(rec);
+          }
+        });
+
+        return { columns: Array.from(colSet), records: outRecords };
+      }
+
+      function loadSheetJS(callback) {
+        if (window.XLSX) return callback(window.XLSX);
+        const script = document.createElement("script");
+        script.src = "https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js";
+        script.onload = () => callback(window.XLSX);
+        script.onerror = () => showToast("Could not load Excel parser. Please upload a .csv file.");
+        document.head.appendChild(script);
+      }
+
+      function handleFileUpload(file) {
+        if (!file) return;
+        const name = file.name;
+        if (name.toLowerCase().endsWith(".csv")) {
+          const reader = new FileReader();
+          reader.onload = e => parseCsvText(e.target.result, name);
+          reader.readAsText(file);
+          return;
+        }
+        showToast("Parsing Excel workbook...");
+        loadSheetJS(XLSX => {
+          const reader = new FileReader();
+          reader.onload = e => {
+            try {
+              const wb = XLSX.read(new Uint8Array(e.target.result), { type: "array", cellDates: false });
+              const allCols = new Set();
+              let allRecords = [];
+              wb.SheetNames.forEach(sheetName => {
+                const ws = wb.Sheets[sheetName];
+                const matrix = XLSX.utils.sheet_to_json(ws, { header: 1, raw: true, defval: "" });
+                const parsed = extractSheetRows(matrix, sheetName);
+                parsed.columns.forEach(c => allCols.add(c));
+                allRecords = allRecords.concat(parsed.records);
+              });
+              if (!allRecords.length) {
+                showToast("No student rows detected in workbook.");
+                return;
+              }
+              applyDataset({ fileName: name, columns: Array.from(allCols), records: allRecords }, true);
+              showToast(`Loaded ${allRecords.length} records from ${wb.SheetNames.length} sheet(s)!`);
+            } catch (err) {
+              showToast("Error reading Excel file.");
+            }
+          };
+          reader.readAsArrayBuffer(file);
+        });
+      }
+
+      function downloadPreBundledHtml() {
+        const cleanRecords = state.records.map(r => {
+          const obj = { Sheet: r.Sheet || "Sheet1" };
+          state.columns.forEach(c => { obj[c] = r[c] || ""; });
+          return obj;
+        });
+        const bundleJson = JSON.stringify({
+          fileName: state.fileName,
+          columns: state.columns,
+          records: cleanRecords
+        }, null, 2).replace(/<\//g, "<\/");
+
+        const docClone = document.documentElement.cloneNode(true);
+        const dataScript = docClone.querySelector("#preloaded-data");
+        if (dataScript) dataScript.textContent = "
+" + bundleJson + "
+";
+        const toastEl = docClone.querySelector("#toast");
+        if (toastEl) { toastEl.classList.remove("show"); toastEl.textContent = ""; }
+
+        const htmlOut = "<!DOCTYPE html>
+" + docClone.outerHTML;
+        downloadFile(htmlOut, "Student-Register-Lookup-Prebundled.html", "text/html;charset=utf-8");
+        showToast("Pre-bundled HTML downloaded!");
+      }
+
+      function init() {
+        // Tab switching
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const target = btn.dataset.tab;
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b === btn));
+            document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + target));
+          });
+        });
+
+        // Field filter pills
+        document.getElementById("fieldPills").addEventListener("click", e => {
+          const pill = e.target.closest(".pill");
+          if (!pill) return;
+          state.activeField = pill.dataset.field;
+          document.querySelectorAll("#fieldPills .pill").forEach(p => p.classList.toggle("active", p === pill));
+          executeSearch();
+        });
+
+        // Sheet filter pills
+        document.getElementById("sheetPills").addEventListener("click", e => {
+          const pill = e.target.closest(".sheet-pill");
+          if (!pill) return;
+          state.activeSheet = pill.dataset.sheet;
+          document.querySelectorAll("#sheetPills .sheet-pill").forEach(p => p.classList.toggle("active", p === pill));
+          executeSearch();
+        });
+
+        // Quick try chips
+        document.getElementById("quickChips").addEventListener("click", e => {
+          const chip = e.target.closest(".quick-chip");
+          if (!chip) return;
+          document.getElementById("searchInput").value = chip.dataset.q;
+          state.activeField = chip.dataset.f || "all";
+          document.querySelectorAll("#fieldPills .pill").forEach(p => p.classList.toggle("active", p.dataset.field === state.activeField));
+          executeSearch();
+        });
+
+        // Search button, Enter key, Clear, Show All
+        const searchInput = document.getElementById("searchInput");
+        document.getElementById("searchBtn").addEventListener("click", executeSearch);
+        searchInput.addEventListener("keydown", e => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            executeSearch();
+          }
+        });
+
+        document.getElementById("clearBtn").addEventListener("click", () => {
+          searchInput.value = "";
+          searchInput.focus();
+          executeSearch();
+        });
+
+        document.getElementById("showAllBtn").addEventListener("click", window.resetSearchFilter);
+
+        // DOB Date Picker trigger
+        const hiddenDate = document.getElementById("hiddenDateInput");
+        document.getElementById("dobPickerBtn").addEventListener("click", () => {
+          if (typeof hiddenDate.showPicker === "function") {
+            try { hiddenDate.showPicker(); } catch (_) { hiddenDate.click(); }
+          } else {
+            hiddenDate.click();
+          }
+        });
+        hiddenDate.addEventListener("change", () => {
+          if (!hiddenDate.value) return;
+          const [yyyy, mm, dd] = hiddenDate.value.split("-");
+          searchInput.value = `${dd}-${mm}-${yyyy}`;
+          state.activeField = "dob";
+          document.querySelectorAll("#fieldPills .pill").forEach(p => p.classList.toggle("active", p.dataset.field === "dob"));
+          executeSearch();
+        });
+
+        // Row-level Copy
+        document.getElementById("searchResultsContainer").addEventListener("click", e => {
+          const btn = e.target.closest(".copy-row-btn");
+          if (!btn) return;
+          const rec = state.records[parseInt(btn.dataset.idx, 10)];
+          if (!rec) return;
+          const text = [`Sheet: ${rec.Sheet}`, ...state.columns.map(c => `${c}: ${rec[c] || "-"}`)].join(" | ");
+          navigator.clipboard?.writeText(text);
+          showToast("Student record copied to clipboard");
+        });
+
+        // Table toolbar actions
+        document.getElementById("copyTableBtn").addEventListener("click", () => {
+          if (!state.filtered.length) return;
+          const lines = state.filtered.map(r => [`Sheet: ${r.Sheet}`, ...state.columns.map(c => `${c}: ${r[c] || "-"}`)].join(" | "));
+          navigator.clipboard?.writeText(lines.join("
+"));
+          showToast(`Copied ${state.filtered.length} record(s)`);
+        });
+
+        document.getElementById("exportMatchesBtn").addEventListener("click", () => {
+          if (!state.filtered.length) return;
+          downloadFile(recordsToCsv(state.filtered), "Student-Search-Results.csv", "text/csv;charset=utf-8");
+        });
+
+        document.getElementById("printBtn").addEventListener("click", () => window.print());
+
+        // Pagination & Full Export
+        document.getElementById("prevPageBtn").addEventListener("click", () => {
+          if (state.registerPage > 1) { state.registerPage--; renderFullRegister(); }
+        });
+        document.getElementById("nextPageBtn").addEventListener("click", () => {
+          state.registerPage++;
+          renderFullRegister();
+        });
+        document.getElementById("exportFullBtn").addEventListener("click", () => {
+          downloadFile(recordsToCsv(state.records), "Full-Student-Register.csv", "text/csv;charset=utf-8");
+        });
+
+        // File upload & Drag/Drop
+        const fileInput = document.getElementById("fileInput");
+        const dropZone = document.getElementById("dropZone");
+        document.getElementById("browseFileBtn").addEventListener("click", () => fileInput.click());
+        dropZone.addEventListener("click", e => {
+          if (e.target.id !== "browseFileBtn") fileInput.click();
+        });
+        fileInput.addEventListener("change", e => handleFileUpload(e.target.files[0]));
+        dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("dragover"); });
+        dropZone.addEventListener("dragleave", () => dropZone.classList.remove("dragover"));
+        dropZone.addEventListener("drop", e => {
+          e.preventDefault();
+          dropZone.classList.remove("dragover");
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) handleFileUpload(e.dataTransfer.files[0]);
+        });
+
+        // Pre-bundle & Reset
+        document.getElementById("downloadBundleBtn").addEventListener("click", downloadPreBundledHtml);
+        document.getElementById("resetDefaultBtn").addEventListener("click", () => {
+          clearIndexedDB();
+          const defaultData = JSON.parse(document.getElementById("preloaded-data").textContent);
+          applyDataset(defaultData, false);
+          showToast("Reset to pre-loaded sample dataset");
+        });
+
+        // Boot: try IndexedDB first, fallback to embedded JSON
+        loadFromIndexedDB(() => {
+          const defaultData = JSON.parse(document.getElementById("preloaded-data").textContent);
+          applyDataset(defaultData, false);
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
